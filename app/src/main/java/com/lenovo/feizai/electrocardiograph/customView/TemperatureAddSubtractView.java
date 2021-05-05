@@ -30,7 +30,7 @@ public class TemperatureAddSubtractView extends LinearLayout implements View.OnC
 
     public TemperatureAddSubtractView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        LayoutInflater.from(context).inflate(R.layout.add_subtract, this);
+        LayoutInflater.from(context).inflate(R.layout.temperature_add_subtract, this);
         initView();
         TypedArray ob = context.obtainStyledAttributes(attrs, R.styleable.TemperatureAddSubtractView);
         String text = ob.getString(R.styleable.TemperatureAddSubtractView_text);
