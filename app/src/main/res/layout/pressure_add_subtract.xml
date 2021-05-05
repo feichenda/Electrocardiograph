@@ -23,6 +23,8 @@
         android:paddingRight="10dp"
         android:textSize="20sp"
         android:text="666"
+        android:lines="1"
+        android:maxLines="1"
         android:background="@drawable/add_subtract_edit_bg"
         android:numeric="integer"
         android:layout_gravity="center"

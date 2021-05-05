@@ -45,12 +45,40 @@ public class PressureAddSubtractView extends LinearLayout implements View.OnClic
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                String temp = s.toString();
+                try {
+                    if (temp.length() == 3) {
+                        return;
+                    }
+                    if (temp.length() > 3) {
+                        Integer value = Integer.valueOf(temp.substring(0, 3));
+                        data.setText(String.format("%03d", value));
+                    }
+                    data.setSelection(text.length());//将光标移至文字末尾
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+//                String temp = s.toString();
+//                try {
+//                    if (temp.length() < 3) {
+//                        Integer value = Integer.valueOf(temp);
+//                        data.setText(String.format("%03d",value));
+//                    } else {
+//                        if (temp.length() == 3) {
+//                            return;
+//                        } else {
+//                            Integer value = Integer.valueOf(temp.substring(0, 2));
+//                            data.setText(String.format("%03d",value));
+//                        }
+//                    }
+//                    data.setSelection(text.length());//将光标移至文字末尾
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
             }
         });
     }

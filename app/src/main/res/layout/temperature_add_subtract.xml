@@ -23,6 +23,8 @@
         android:paddingRight="10dp"
         android:textSize="20sp"
         android:text="18.50"
+        android:lines="1"
+        android:maxLines="1"
         android:background="@drawable/add_subtract_edit_bg"
         android:inputType="numberSigned|numberDecimal"
         android:layout_gravity="center"
