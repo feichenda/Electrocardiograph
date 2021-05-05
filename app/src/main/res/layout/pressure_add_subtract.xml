@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:background="@drawable/add_subtract_left_button_bg"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:text="-"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:id="@+id/subtract" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:minWidth="60dp"
+        android:layout_height="30dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textSize="20sp"
+        android:text="666"
+        android:background="@drawable/add_subtract_edit_bg"
+        android:numeric="integer"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:id="@+id/data_edit" />
+
+    <TextView
+        android:background="@drawable/add_subtract_right_button_bg"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:text="+"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:id="@+id/add" />
+
+</LinearLayout>

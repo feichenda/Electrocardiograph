@@ -8,36 +8,33 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.lenovo.feizai.electrocardiograph.R;
-import com.orhanobut.logger.Logger;
 
 /**
  * @author feizai
- * @date 2021/5/4 0004 下午 7:48:04
+ * @date 2021/5/5 0005 下午 7:55:35
  */
-public class TemperatureAddSubtractView extends LinearLayout implements View.OnClickListener {
+public class PressureAddSubtractView extends LinearLayout implements View.OnClickListener {
 
     private TextView subtract;
     private TextView add;
     private EditText data;
 
-    public TemperatureAddSubtractView(Context context, @Nullable AttributeSet attrs) {
+    public PressureAddSubtractView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        LayoutInflater.from(context).inflate(R.layout.temperature_add_subtract, this);
+        LayoutInflater.from(context).inflate(R.layout.pressure_add_subtract, this);
         initView();
-        TypedArray ob = context.obtainStyledAttributes(attrs, R.styleable.TemperatureAddSubtractView);
-        String text = ob.getString(R.styleable.TemperatureAddSubtractView_text);
-        int color = ob.getColor(R.styleable.TemperatureAddSubtractView_textColor, Color.BLACK);
+        TypedArray ob = context.obtainStyledAttributes(attrs, R.styleable.PressureAddSubtractView);
+        String text = ob.getString(R.styleable.PressureAddSubtractView_text);
+        int color = ob.getColor(R.styleable.PressureAddSubtractView_textColor, Color.BLACK);
         data.setTextColor(color);
         data.setText(text);
         data.addTextChangedListener(new TextWatcher() {
@@ -48,17 +45,7 @@ public class TemperatureAddSubtractView extends LinearLayout implements View.OnC
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String temp = s.toString();
-                if (temp.contains(".")) {
-                    int index=temp.indexOf(".");
-                    if (index + 3 < temp.length()) {
-                        temp = temp.substring(0, index + 3);
-                        data.setText(temp);
-                        data.setSelection(temp.length());
-                    }
-                } else {
 
-                }
             }
 
             @Override
@@ -68,19 +55,11 @@ public class TemperatureAddSubtractView extends LinearLayout implements View.OnC
         });
     }
 
-    private void initView() {
-        subtract = findViewById(R.id.subtract);
-        add = findViewById(R.id.add);
-        data = findViewById(R.id.data_edit);
-        add.setOnClickListener(this);
-        subtract.setOnClickListener(this);
-    }
-
     @Override
     public void onClick(View v) {
         String text = data.getText().toString().trim();
         if (TextUtils.isEmpty(text)) {
-            text = "0.00";
+            text = "000";
             data.setText(text);
             data.setSelection(text.length());//将光标移至文字末尾
         }
@@ -88,19 +67,26 @@ public class TemperatureAddSubtractView extends LinearLayout implements View.OnC
             Double value = Double.valueOf(text);
             switch (v.getId()) {
                 case R.id.add:
-                    value = value + 0.01;
-                    data.setText(String.format("%.2f",value));
+                    value = value + 1;
+                    data.setText(String.format("%03d",value));
                     break;
                 case R.id.subtract:
-                    value = value - 0.01;
-                    data.setText(String.format("%.2f",value));
+                    value = value - 1;
+                    data.setText(String.format("%03d",value));
                     break;
             }
             data.setSelection(text.length());//将光标移至文字末尾
         } catch (Exception e) {
             e.printStackTrace();
-            Logger.e("请输入小数");
         }
+    }
+
+    private void initView() {
+        subtract = findViewById(R.id.subtract);
+        add = findViewById(R.id.add);
+        data = findViewById(R.id.data_edit);
+        add.setOnClickListener(this);
+        subtract.setOnClickListener(this);
     }
 
     public void setTectColor(int color) {

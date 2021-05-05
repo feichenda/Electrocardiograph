@@ -4,4 +4,9 @@
         <attr name="text" format="string" />
         <attr name="textColor" format="color" />
     </declare-styleable>
+
+    <declare-styleable name="PressureAddSubtractView">
+        <attr name="text" format="string" />
+        <attr name="textColor" format="color" />
+    </declare-styleable>
 </resources>
