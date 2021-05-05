@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <attr name="text" format="string" />
+    <attr name="textColor" format="color" />
+
     <declare-styleable name="TemperatureAddSubtractView">
-        <attr name="text" format="string" />
-        <attr name="textColor" format="color" />
+        <attr name="text" />
+        <attr name="textColor" />
     </declare-styleable>
 
     <declare-styleable name="PressureAddSubtractView">
-        <attr name="text" format="string" />
-        <attr name="textColor" format="color" />
+        <attr name="text" />
+        <attr name="textColor" />
     </declare-styleable>
 </resources>

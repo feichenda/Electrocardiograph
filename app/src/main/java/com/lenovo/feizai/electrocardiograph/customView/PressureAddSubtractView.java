@@ -64,15 +64,17 @@ public class PressureAddSubtractView extends LinearLayout implements View.OnClic
             data.setSelection(text.length());//将光标移至文字末尾
         }
         try {
-            Double value = Double.valueOf(text);
+            Integer value = Integer.valueOf(text);
             switch (v.getId()) {
                 case R.id.add:
                     value = value + 1;
-                    data.setText(String.format("%03d",value));
+                    data.setText(String.format("%03d", value));
                     break;
                 case R.id.subtract:
-                    value = value - 1;
-                    data.setText(String.format("%03d",value));
+                    if (value > 0) {
+                        value = value - 1;
+                    }
+                    data.setText(String.format("%03d", value));
                     break;
             }
             data.setSelection(text.length());//将光标移至文字末尾
