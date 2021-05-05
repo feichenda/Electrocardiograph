@@ -1,0 +1,90 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "com.lenovo.feizai.electrocardiograph"
+        minSdkVersion 19
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation files('libs\\CH34xUARTDriver.jar')
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    implementation 'com.android.support:multidex:1.0.3'
+
+    //recycleview
+    implementation 'androidx.recyclerview:recyclerview:1.2.0-alpha06'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
+
+    //分割线jar包
+    implementation 'com.yqritc:recyclerview-flexibledivider:1.4.0'
+
+    //图片加载框架
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
+    //集成photoview
+    implementation 'com.github.chrisbanes:PhotoView:1.2.6'
+
+    //集成时间，地址或自定义选择器
+    implementation 'com.contrarywind:Android-PickerView:4.1.9'
+
+    //图片选择框架
+    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.5.9'
+
+    //集成retrofit2 RxJava3 RxAndroid Gson
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation "io.reactivex.rxjava3:rxjava:3.0.7"
+
+    //引入Log拦截器，方便DEBUG模式输出log信息
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.5.0'
+
+    //集成ButterKnife
+    implementation 'com.jakewharton:butterknife:10.2.3'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
+
+    //集成dialog
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'com.google.android.material:material:1.0.0'
+
+    implementation 'com.github.Giftedcat:DynamicPublishing:1.0.0'
+
+    //lombok
+    implementation 'org.projectlombok:lombok:1.18.16'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+    //log日志输出
+    implementation 'com.orhanobut:logger:2.2.0'
+}
