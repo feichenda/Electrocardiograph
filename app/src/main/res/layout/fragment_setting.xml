@@ -86,16 +86,15 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/hight_pressure_data"
+                <com.lenovo.feizai.electrocardiograph.customView.PressureAddSubtractView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="18" />
+                    app:text="018" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="H-mmHg" />
+                    android:text="H-mmHg\t上限" />
 
             </LinearLayout>
 
