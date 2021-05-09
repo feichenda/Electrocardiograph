@@ -10,16 +10,17 @@ import android.os.Message;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.lenovo.feizai.electrocardiograph.R;
-import com.lenovo.feizai.electrocardiograph.activity.MainActivity;
 import com.lenovo.feizai.electrocardiograph.application.MyApplication;
 import com.lenovo.feizai.electrocardiograph.base.BaseFragment;
 import com.orhanobut.logger.Logger;
@@ -28,6 +29,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.wch.ch34xuartdriver.CH34xUARTDriver;
 
 /**
@@ -46,9 +48,13 @@ public class DataFragment extends BaseFragment {
     TextView low_pressure_data;
     @BindView(R.id.average_pressure_data)
     TextView average_pressure_data;
+    @BindView(R.id.link)
+    Button link;
+    @BindView(R.id.spinner)
+    Spinner spinner;
 
     private static final String ACTION_USB_PERMISSION = "cn.wch.wchusbdriver.USB_PERMISSION";
-    private boolean isOpen;
+    private boolean isOpen = false;
     private int retval;
     private int x, x0, w, h, y0;
     private Canvas c2 = null;
@@ -64,10 +70,13 @@ public class DataFragment extends BaseFragment {
     private Handler xdtHandler;
     private Handler temperatureHandler;
     private Handler pressureHandler;
-    private Timer xdtTimer = new Timer();
-    private Timer temperatureTimer = new Timer();
-    private Timer pressureTimer = new Timer();
+    private Timer timer = new Timer();
+
+    private TimerTask temperatureTask;
+    private TimerTask pressureTask;
+    private TimerTask xdtTask;
     private int i;
+
 
     public DataFragment() {
         super(R.layout.fragment_data);
@@ -75,6 +84,121 @@ public class DataFragment extends BaseFragment {
 
     @Override
     protected void initView(View view) {
+        isOpen = false;
+        String[] mItems = {"体温", "血压", "心电"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.support_simple_spinner_dropdown_item, mItems);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                showToast(position+"项");
+                if (!isOpen) {
+                   return;
+                }
+                if (temperatureTask != null) {
+                    temperatureTask.cancel();
+                }
+                if (pressureTask != null) {
+                    pressureTask.cancel();
+                }
+                if (xdtTask != null) {
+                    xdtTask.cancel();
+                }
+                timer.cancel();
+                timer = new Timer();
+                switch (position) {
+                    case 0:
+                        temperatureTask = new TimerTask() {
+                            @Override
+                            public void run() {
+                                byte[] buffer = new byte[4096];
+                                while (true) {
+                                    Message msg = Message.obtain();
+//                                    if (!isOpen) {
+//                                        break;
+//                                    }
+                                    int length = MyApplication.driver.ReadData(buffer, 4096);
+                                    if (length > 0) {
+                                        String recv = new String(buffer, 0, length);        //以字符串形式输出
+                                        msg.obj = recv;
+                                        temperatureHandler.sendMessage(msg);
+                                    }
+                                }
+                            }
+                        };
+                        showToast("t1");
+                        timer.schedule(temperatureTask, 1000, 10); // 1000毫秒才执行第一次，后面每10毫秒执行一次
+                        showToast("t2");
+                        break;
+                    case 1:
+                        pressureTask = new TimerTask() {
+                            @Override
+                            public void run() {
+                                byte[] buffer = new byte[4096];
+                                while (true) {
+
+                                    Message msg = Message.obtain();
+//                                    if (!isOpen) {
+//                                        break;
+//                                    }
+                                    int length = MyApplication.driver.ReadData(buffer, 4096);
+                                    if (length > 0) {
+                                        String recv = new String(buffer, 0, length);        //以字符串形式输出
+
+                                        msg.obj = recv;
+                                        pressureHandler.sendMessage(msg);
+                                    }
+                                }
+                            }
+                        };
+                        showToast("p1");
+                        timer.schedule(pressureTask, 1000, 10); // 1000毫秒才执行第一次，后面每10毫秒执行一次
+                        showToast("p2");
+                        break;
+                    case 2:
+                        xdtTask = new TimerTask() {
+                            @Override
+                            public void run() {
+                                if (dyc) {// 定时器第一次运行
+                                    dyc = false;
+                                    paint.setColor(0xff000000);
+                                    paint.setStrokeWidth(2); // 线宽
+                                    h = surfaceView.getHeight();
+                                    w = surfaceView.getWidth();
+                                    bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+                                    c2 = new Canvas(bitmap);
+                                    c2.drawColor(0xffcccccc);
+                                    return;
+                                }
+                                Message msg = Message.obtain();
+                                byte[] buffer = new byte[2];
+                                // 一次读取两个数据是为了防止读取速度跟不上单片机发来的速度，导致心电数据不能实时显示，且误差可能会越来越大
+                                int length = MyApplication.driver.ReadData(buffer, 2);
+                                Logger.e("" + length);
+
+                                if (length > 0) {
+                                    msg.arg1 = buffer[0] & 0xff; // 因为byte范围是-128~+127，而单片机发来的数据是16进制的范围0~255，所以需要 & 0xff 转换
+                                    if (length > 1)
+                                        msg.arg2 = buffer[1] & 0xff;
+                                    msg.what = length;
+                                    xdtHandler.sendMessage(msg);
+                                }
+                            }
+                        };
+                        showToast("x1");
+                        timer.schedule(xdtTask, 1000, 10); // 1000毫秒才执行第一次，后面每10毫秒执行一次
+                        showToast("x2");
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         i = 0;
         MyApplication.driver = new CH34xUARTDriver((UsbManager) getActivity().getSystemService(Context.USB_SERVICE), getContext(), ACTION_USB_PERMISSION);
         holder = surfaceView.getHolder();
@@ -103,12 +227,7 @@ public class DataFragment extends BaseFragment {
                 }
             }).show();
         }
-        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 保持常亮的屏幕的状态
-        // configButton.setEnabled(false);
 
-        xdtTimer.schedule(xdtTask, 1000, 10); // 1000毫秒才执行第一次，后面每10毫秒执行一次
-//        temperatureTimer.schedule(temperatureTask, 1000, 10); // 1000毫秒才执行第一次，后面每10毫秒执行一次
-//        pressureTimer.schedule(pressureTask, 1000, 10); // 1000毫秒才执行第一次，后面每10毫秒执行一次
         Logger.e("定时器开始");
         xdtHandler = new Handler() {
 
@@ -147,46 +266,60 @@ public class DataFragment extends BaseFragment {
                 }
             }
         };
-        open();
+
     }
 
-    public void open() {
-        retval = MyApplication.driver.ResumeUsbList();
-        if (retval == -1)// ResumeUsbList方法用于枚举CH34X设备以及打开相关设备
-        {
-            showToast("打开设备失败!");
-            MyApplication.driver.CloseDevice();
-        } else if (retval == 0) {
-            if (!MyApplication.driver.UartInit()) {// 对串口设备进行初始化操作
-                showToast("设备初始化失败!");
+    @OnClick(R.id.link)
+    public void link() {
+        if (!isOpen) {
+            retval = MyApplication.driver.ResumeUsbList();
+            if (retval == -1)// ResumeUsbList方法用于枚举CH34X设备以及打开相关设备
+            {
                 showToast("打开设备失败!");
-                return;
-            }
-            showToast("打开设备成功!");
-            isOpen = true;
-            if (MyApplication.driver.SetConfig(baudRate, dataBit, stopBit, parity, // 配置串口波特率，函数说明可参照编程手册
-                    flowControl)) {
-                showToast("串口设置成功!");
+                MyApplication.driver.CloseDevice();
+            } else if (retval == 0) {
+                if (!MyApplication.driver.UartInit()) {// 对串口设备进行初始化操作
+                    showToast("设备初始化失败!");
+                    showToast("打开设备失败!");
+                    return;
+                }
+                showToast("打开设备成功!");
+                isOpen = true;
+                link.setText("断开设备");
+                if (MyApplication.driver.SetConfig(baudRate, dataBit, stopBit, parity, // 配置串口波特率，函数说明可参照编程手册
+                        flowControl)) {
+                    showToast("串口设置成功!");
+                } else {
+                    showToast("串口设置失败!");
+                }
             } else {
-                showToast("串口设置失败!");
+
+                new MaterialDialog.Builder(getContext())
+                        .icon(getResources().getDrawable(R.drawable.icon))
+                        .title("未授权限")
+                        .content("确认退出吗？")
+                        .positiveText("确定")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                getActivity().finish();
+                            }
+                        })
+                        .negativeText("返回").show();
             }
-
         } else {
-
-            new MaterialDialog.Builder(getContext())
-                    .icon(getResources().getDrawable(R.drawable.icon))
-                    .title("未授权限")
-                    .content("确认退出吗？")
-                    .positiveText("确定")
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            getActivity().finish();
-                        }
-                    })
-                    .negativeText("返回").show();
+            link.setText("连接设备");
+            isOpen = false;
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            MyApplication.driver.CloseDevice();
         }
     }
+
 
     private void drawxdt(int xd) {
         if (x0 < x)
@@ -204,78 +337,7 @@ public class DataFragment extends BaseFragment {
         holder.unlockCanvasAndPost(c);
     }
 
-    TimerTask xdtTask = new TimerTask() {
-        @Override
-        public void run() {
-            if (dyc) {// 定时器第一次运行
-                dyc = false;
-                paint.setColor(0xff000000);
-                paint.setStrokeWidth(2); // 线宽
-                h = surfaceView.getHeight();
-                w = surfaceView.getWidth();
-                bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-                c2 = new Canvas(bitmap);
-                c2.drawColor(0xffcccccc);
-                return;
-            }
-            Message msg = Message.obtain();
-            byte[] buffer = new byte[2];
-            // 一次读取两个数据是为了防止读取速度跟不上单片机发来的速度，导致心电数据不能实时显示，且误差可能会越来越大
-            int length = MyApplication.driver.ReadData(buffer, 2);
-            Logger.e("" + length);
 
-            if (length > 0) {
-                msg.arg1 = buffer[0] & 0xff; // 因为byte范围是-128~+127，而单片机发来的数据是16进制的范围0~255，所以需要 & 0xff 转换
-                if (length > 1)
-                    msg.arg2 = buffer[1] & 0xff;
-                msg.what = length;
-                xdtHandler.sendMessage(msg);
-            }
-        }
-    };
-
-    TimerTask temperatureTask = new TimerTask() {
-        @Override
-        public void run() {
-            byte[] buffer = new byte[4096];
-            while (true) {
-
-                Message msg = Message.obtain();
-//                if (!isOpen) {
-//                    break;
-//                }
-                int length = MyApplication.driver.ReadData(buffer, 4096);
-                if (length > 0) {
-//                    String recv = toHexString(buffer, length);        //以16进制输出
-                    String recv = new String(buffer, 0, length);        //以字符串形式输出
-                    msg.obj = recv;
-                    temperatureHandler.sendMessage(msg);
-                }
-            }
-        }
-    };
-
-    TimerTask pressureTask = new TimerTask() {
-        @Override
-        public void run() {
-            byte[] buffer = new byte[4096];
-            while (true) {
-
-                Message msg = Message.obtain();
-//                if (!isOpen) {
-//                    break;
-//                }
-                int length = MyApplication.driver.ReadData(buffer, 4096);
-                if (length > 0) {
-//                    String recv = toHexString(buffer, length);        //以16进制输出
-                    String recv = new String(buffer, 0, length);        //以字符串形式输出
-
-                    msg.obj = recv;
-                    pressureHandler.sendMessage(msg);
-                }
-            }
-        }
-    };
 
     /**
      * 将byte[]数组转化为String类型
@@ -380,9 +442,7 @@ public class DataFragment extends BaseFragment {
             bitmap.recycle();
         bitmap = null;
         c2 = null;
-        xdtTimer.cancel();
-        temperatureTimer.cancel();
-        pressureTimer.cancel();
+        timer.cancel();
         Logger.e("定时器停止");
         try {
             Thread.sleep(200);
@@ -395,4 +455,5 @@ public class DataFragment extends BaseFragment {
         Logger.e("程序退出");
 //        System.exit(0);
     }
+
 }

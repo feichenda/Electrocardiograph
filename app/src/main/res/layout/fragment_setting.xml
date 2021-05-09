@@ -12,220 +12,248 @@
         android:padding="10dp"
         android:text="系统设置" />
 
-    <RelativeLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0.5dp"
+        android:background="@color/color_gray" />
 
-        <TextView
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:textSize="20sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="体温:" />
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <LinearLayout
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-                <com.lenovo.feizai.electrocardiograph.customView.TemperatureAddSubtractView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:text="18.56"
-                    app:textColor="@color/color_red"
-                    android:id="@+id/hight_temperature_data" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="℃\t\t下限" />
+                    android:layout_gravity="center_horizontal"
+                    android:text="体温设置:"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <com.lenovo.feizai.electrocardiograph.customView.TemperatureAddSubtractView
+                            android:id="@+id/hight_temperature_data"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:text="18.56"
+                            app:textColor="@color/color_red" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="20dp"
+                            android:text="℃\t\t下限" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <com.lenovo.feizai.electrocardiograph.customView.TemperatureAddSubtractView
+                            android:id="@+id/low_temperature_data"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:text="18.56"
+                            app:textColor="@color/color_yellow" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="20dp"
+                            android:text="℃\t\t下限" />
+
+                    </LinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
-            <LinearLayout
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:orientation="horizontal">
 
-                <com.lenovo.feizai.electrocardiograph.customView.TemperatureAddSubtractView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:text="18.56"
-                    app:textColor="@color/color_yellow"
-                    android:id="@+id/low_temperature_data" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="℃\t\t下限" />
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_horizontal"
+                    android:text="血压设置:"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp" />
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <com.lenovo.feizai.electrocardiograph.customView.PressureAddSubtractView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:text="018"
+                            app:textColor="@color/color_red" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:text="H-mmHg\t\t上限" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <com.lenovo.feizai.electrocardiograph.customView.PressureAddSubtractView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:text="018"
+                            app:textColor="@color/color_yellow" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:text="H-mmHg\t\t下限" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <com.lenovo.feizai.electrocardiograph.customView.PressureAddSubtractView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:text="018"
+                            app:textColor="@color/color_red" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:text="L-mmHg\t\t上限" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <com.lenovo.feizai.electrocardiograph.customView.PressureAddSubtractView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:text="018"
+                            app:textColor="@color/color_yellow" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:text="L-mmHg\t\t下限" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <com.lenovo.feizai.electrocardiograph.customView.PressureAddSubtractView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:text="018"
+                            app:textColor="@color/color_red" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:text="PUL/min\t\t上限" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <com.lenovo.feizai.electrocardiograph.customView.PressureAddSubtractView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:text="018"
+                            app:textColor="@color/color_yellow" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:text="PUL/min\t\t下限" />
+
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-
-    </RelativeLayout>
-
+    </androidx.core.widget.NestedScrollView>
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_marginLeft="20dp"
-            android:textSize="20sp"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="血压:" />
 
-        <LinearLayout
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_marginTop="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.lenovo.feizai.electrocardiograph.customView.PressureAddSubtractView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:textColor="@color/color_red"
-                    app:text="018" />
-
-                <TextView
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="H-mmHg\t\t上限" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.lenovo.feizai.electrocardiograph.customView.PressureAddSubtractView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:textColor="@color/color_yellow"
-                    app:text="018" />
-
-                <TextView
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="H-mmHg\t\t下限" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.lenovo.feizai.electrocardiograph.customView.PressureAddSubtractView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:textColor="@color/color_red"
-                    app:text="018" />
-
-                <TextView
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="L-mmHg\t\t上限" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.lenovo.feizai.electrocardiograph.customView.PressureAddSubtractView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:textColor="@color/color_yellow"
-                    app:text="018" />
-
-                <TextView
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="L-mmHg\t\t下限" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.lenovo.feizai.electrocardiograph.customView.PressureAddSubtractView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:textColor="@color/color_red"
-                    app:text="018" />
-
-                <TextView
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PUL/min\t\t上限" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.lenovo.feizai.electrocardiograph.customView.PressureAddSubtractView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:textColor="@color/color_yellow"
-                    app:text="018" />
-
-                <TextView
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PUL/min\t\t下限" />
-
-            </LinearLayout>
-        </LinearLayout>
-    </RelativeLayout>
 
 
 

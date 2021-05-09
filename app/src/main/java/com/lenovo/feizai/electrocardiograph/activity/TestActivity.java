@@ -2,6 +2,7 @@ package com.lenovo.feizai.electrocardiograph.activity;
 
 import android.content.Intent;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
@@ -31,6 +32,7 @@ public class TestActivity extends BaseActivity implements BottomNavigationView.O
 
     @Override
     protected void initView() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 保持常亮的屏幕的状态
         bottom_navigation_view.setOnNavigationItemSelectedListener(this);
         bottom_navigation_view.setSelectedItemId(R.id.navigation_data);
     }

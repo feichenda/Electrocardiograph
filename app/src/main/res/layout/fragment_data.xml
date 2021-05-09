@@ -4,6 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -11,61 +15,90 @@
             android:padding="10dp"
             android:text="当前数据" />
 
+        <Button
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="连接设备"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/link" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/color_gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <Spinner
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="40dp"
+                android:dropDownVerticalOffset="40dp"
+                android:id="@+id/spinner" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_marginLeft="20dp"
                     android:id="@+id/temperature_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="体温:" />
+                    android:layout_marginLeft="20dp"
+                    android:text="体温:"
+                    android:textSize="18sp" />
 
                 <TextView
-                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="right"
+                    android:gravity="right"
                     android:id="@+id/temperature_data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="18" />
+                    android:text="18"
+                    android:textSize="18sp" />
 
                 <TextView
-                    android:layout_toRightOf="@id/temperature_data"
+                    android:layout_gravity="right"
+                    android:gravity="right"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="℃" />
-
-            </RelativeLayout>
+                    android:text="℃"
+                    android:textSize="18sp" />
+            </LinearLayout>
 
             <RelativeLayout
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/pressure_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
                     android:layout_marginLeft="20dp"
-                    android:layout_centerVertical="true"
-                    android:text="血压:" />
+                    android:text="血压:"
+                    android:textSize="18sp" />
 
                 <LinearLayout
-                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/pressure_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentRight="true"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -77,14 +110,14 @@
                             android:id="@+id/hight_pressure_data"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
-                            android:text="18" />
+                            android:text="18"
+                            android:textSize="18sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
-                            android:text="H-mmHg" />
+                            android:text="H-mmHg"
+                            android:textSize="18sp" />
 
                     </LinearLayout>
 
@@ -97,14 +130,14 @@
                             android:id="@+id/low_pressure_data"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
-                            android:text="18" />
+                            android:text="18"
+                            android:textSize="18sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
-                            android:text="L-mmHg" />
+                            android:text="L-mmHg"
+                            android:textSize="18sp" />
 
                     </LinearLayout>
 
@@ -117,42 +150,39 @@
                             android:id="@+id/average_pressure_data"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
-                            android:text="18" />
+                            android:text="18"
+                            android:textSize="18sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
-                            android:text="PUL/min" />
+                            android:text="PUL/min"
+                            android:textSize="18sp" />
 
                     </LinearLayout>
                 </LinearLayout>
             </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="4"
-                android:orientation="vertical">
-
-                <TextView
-                    android:textSize="20sp"
-                    android:id="@+id/surfaceView_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
-                    android:text="心电:" />
-
-                <SurfaceView
-                    android:id="@+id/surfaceView"
-                    android:layout_toRightOf="@id/surfaceView_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"/>
-            </LinearLayout>
-
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="心电图" />
+
+
+            <SurfaceView
+                android:id="@+id/surfaceView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp" />
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
