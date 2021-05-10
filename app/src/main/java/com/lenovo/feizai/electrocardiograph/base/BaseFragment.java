@@ -16,6 +16,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +46,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(resLayout, container, false);
+        Logger.addLogAdapter(new AndroidLogAdapter());
         ButterKnife.bind(this, view);
         initView(view);
         return view;

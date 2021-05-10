@@ -15,6 +15,8 @@ import androidx.core.content.ContextCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(resLayout);
+        Logger.addLogAdapter(new AndroidLogAdapter());
         ButterKnife.bind(this);
         initView();
     }
