@@ -6,7 +6,6 @@ import android.widget.TextView;
 import com.lenovo.feizai.electrocardiograph.R;
 import com.lenovo.feizai.electrocardiograph.base.BaseActivity;
 
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -48,7 +47,7 @@ public class LoginActivity extends BaseActivity {
                 }
                 if (count == 0) {
                     timer.cancel();
-                    startActivity(TestActivity.class);
+                    startActivity(MainActivity.class);
                     finish();
                 }
             }
@@ -60,7 +59,7 @@ public class LoginActivity extends BaseActivity {
     public void enter() {
         count = 0;
         timer.cancel();
-        startActivity(TestActivity.class);
+        startActivity(MainActivity.class);
         finish();
     }
 
@@ -68,7 +67,7 @@ public class LoginActivity extends BaseActivity {
     public void jump() {
         count = 0;
         timer.cancel();
-        startActivity(TestActivity.class);
+        startActivity(MainActivity.class);
         finish();
     }
 }

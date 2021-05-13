@@ -17,9 +17,6 @@
         <activity android:name=".activity.MainActivity" android:screenOrientation="landscape">
 
         </activity>
-        <activity android:name=".activity.TestActivity" android:screenOrientation="landscape">
-
-        </activity>
         <activity android:name=".activity.LoginActivity" android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
