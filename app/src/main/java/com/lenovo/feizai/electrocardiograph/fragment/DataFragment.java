@@ -197,6 +197,7 @@ public class DataFragment extends BaseFragment {
 
         MyApplication.driver = new CH34xUARTDriver((UsbManager) getActivity().getSystemService(Context.USB_SERVICE), getContext(), ACTION_USB_PERMISSION);
         holder = surfaceView.getHolder();
+        Logger.e(holder.toString());
 
         /* by default it is 9600 */
         baudRate = 19200;// 9600;
@@ -499,10 +500,13 @@ public class DataFragment extends BaseFragment {
             x = 0;
             c2.drawColor(0xffcccccc);
         }
+        if (isOpen) {
+            Canvas c = holder.lockCanvas();
+            Logger.e(holder+"111111");
+            c.drawBitmap(bitmap, 0, 0, null);
+            holder.unlockCanvasAndPost(c);
+        }
 
-        Canvas c = holder.lockCanvas();
-        c.drawBitmap(bitmap, 0, 0, null);
-        holder.unlockCanvasAndPost(c);
     }
 
 
@@ -605,22 +609,24 @@ public class DataFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        isOpen = false;
         cancel();
         timer.cancel();
+
 //        if (bitmap != null)
 //            bitmap.recycle();
 //        bitmap = null;
 //        c2 = null;
 
         Logger.e("定时器停止");
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(500);
+//        } catch (InterruptedException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
         getNowData();
-        isOpen = false;
+
         MyApplication.driver.CloseDevice();
         Logger.e("关闭串口");
 //        System.exit(0);
