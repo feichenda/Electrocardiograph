@@ -1,8 +1,10 @@
 package com.lenovo.feizai.electrocardiograph.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.hardware.usb.UsbManager;
 import android.os.Handler;
@@ -14,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -49,8 +52,8 @@ public class DataFragment extends BaseFragment {
     TextView hight_pressure_data;
     @BindView(R.id.low_pressure_data)
     TextView low_pressure_data;
-    @BindView(R.id.average_pressure_data)
-    TextView average_pressure_data;
+    @BindView(R.id.heartbeat_data)
+    TextView heartbeat_data;
     @BindView(R.id.link)
     Button link;
     @BindView(R.id.temperature)
@@ -59,6 +62,8 @@ public class DataFragment extends BaseFragment {
     RadioButton pressure;
     @BindView(R.id.xdt)
     RadioButton xdt;
+    @BindView(R.id.radiogroup)
+    RadioGroup radioGroup;
 
     private static final String ACTION_USB_PERMISSION = "cn.wch.wchusbdriver.USB_PERMISSION";
     private boolean isOpen = false;
@@ -85,9 +90,99 @@ public class DataFragment extends BaseFragment {
     private boolean isFirst;
     private boolean flag;
 
+    private float low_temperature;
+    private float hight_temperature;
+    private int hight_hpressure;
+    private int low_hpressure;
+    private int hight_lpressure;
+    private int low_lpressure;
+    private int hight_heartbeat;
+    private int low_heartbeat;
+
+    private float temperature_data1;
+    private int low_pressure_data1;
+    private int hight_pressure_data1;
+    private int heartbeat_data1;
+
 
     public DataFragment() {
         super(R.layout.fragment_data);
+    }
+
+    private void initValue() {
+        SharedPreferences preferences = getActivity().getSharedPreferences("setting", Context.MODE_PRIVATE);
+        hight_temperature = preferences.getFloat("hight_temperature", 37.30f);
+        low_temperature = preferences.getFloat("low_temperature", 35.50f);
+
+        hight_hpressure = preferences.getInt("hight_hpressure",140);
+        low_hpressure = preferences.getInt("low_hpressure",90);
+
+        hight_lpressure = preferences.getInt("hight_lpressure",90);
+        low_lpressure = preferences.getInt("low_lpressure",60);
+
+        hight_heartbeat = preferences.getInt("hight_heartbeat",100);
+        low_heartbeat = preferences.getInt("low_heartbeat",60);
+    }
+
+    private void getHistory() {
+        SharedPreferences history = getActivity().getSharedPreferences("data", Context.MODE_PRIVATE);
+        String history_temperature_data = history.getString("temperature", "");
+        String history_low_pressure_data = history.getString("low_pressure", "");
+        String history_hight_pressure_data = history.getString("hight_pressure", "");
+        String history_heartbeat_data = history.getString("heartbeat", "");
+
+        try {
+            if (!history_temperature_data.isEmpty()) {
+                temperature_data1 = Float.parseFloat(history_temperature_data);
+            }
+            if (!history_temperature_data.isEmpty()) {
+                low_pressure_data1 = Integer.parseInt(history_low_pressure_data);
+            }
+            if (!history_temperature_data.isEmpty()) {
+                hight_pressure_data1 = Integer.parseInt(history_hight_pressure_data);
+            }
+            if (!history_temperature_data.isEmpty()) {
+                heartbeat_data1 = Integer.parseInt(history_heartbeat_data);
+            }
+
+            if (temperature_data1 >= hight_temperature) {
+                temperature_data.setTextColor(Color.RED);
+            } else if (temperature_data1 <= low_temperature) {
+                temperature_data.setTextColor(Color.YELLOW);
+            } else {
+                temperature_data.setTextColor(Color.GREEN);
+            }
+            if (hight_pressure_data1 >= hight_hpressure) {
+                hight_pressure_data.setTextColor(Color.RED);
+            } else if (hight_pressure_data1 <= low_hpressure) {
+                hight_pressure_data.setTextColor(Color.YELLOW);
+            } else {
+                hight_pressure_data.setTextColor(Color.GREEN);
+            }
+
+            if (low_pressure_data1 >= hight_lpressure) {
+                low_pressure_data.setTextColor(Color.RED);
+            } else if (low_pressure_data1 <= low_lpressure) {
+                low_pressure_data.setTextColor(Color.YELLOW);
+            } else {
+                low_pressure_data.setTextColor(Color.GREEN);
+            }
+
+            if (heartbeat_data1 >= hight_heartbeat) {
+                heartbeat_data.setTextColor(Color.RED);
+            } else if (heartbeat_data1 <= low_heartbeat) {
+                heartbeat_data.setTextColor(Color.YELLOW);
+            } else {
+                heartbeat_data.setTextColor(Color.GREEN);
+            }
+
+            temperature_data.setText(String.format("%.2f", temperature_data1));
+            hight_pressure_data.setText(String.format("%03d", hight_pressure_data1));
+            low_pressure_data.setText(String.format("%03d", low_pressure_data1));
+            heartbeat_data.setText(String.format("%03d", heartbeat_data1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -96,6 +191,9 @@ public class DataFragment extends BaseFragment {
         isFirst = false;
         flag = true;
         i = 0;
+
+        initValue();
+        getHistory();
 
         MyApplication.driver = new CH34xUARTDriver((UsbManager) getActivity().getSystemService(Context.USB_SERVICE), getContext(), ACTION_USB_PERMISSION);
         holder = surfaceView.getHolder();
@@ -131,42 +229,49 @@ public class DataFragment extends BaseFragment {
     @OnClick(R.id.link)
     public void link() {
         if (!isOpen) {
-            retval = MyApplication.driver.ResumeUsbList();
-            if (retval == -1)// ResumeUsbList方法用于枚举CH34X设备以及打开相关设备
-            {
-                showToast("打开设备失败!");
-                MyApplication.driver.CloseDevice();
-            } else if (retval == 0) {
-                if (!MyApplication.driver.UartInit()) {// 对串口设备进行初始化操作
-                    showToast("设备初始化失败!");
+            retval = MyApplication.driver.ResumeUsbPermission();
+            if (retval == 0) {
+                retval = MyApplication.driver.ResumeUsbList();
+                if (retval == -1)// ResumeUsbList方法用于枚举CH34X设备以及打开相关设备
+                {
                     showToast("打开设备失败!");
-                    return;
-                }
-                showToast("打开设备成功!");
-                isOpen = true;
-                link.setText("断开设备");
-                if (MyApplication.driver.SetConfig(baudRate, dataBit, stopBit, parity, // 配置串口波特率，函数说明可参照编程手册
-                        flowControl)) {
-                    showToast("串口设置成功!");
+                    MyApplication.driver.CloseDevice();
+                } else if (retval == 0) {
+                    if (!MyApplication.driver.UartInit()) {// 对串口设备进行初始化操作
+                        showToast("设备初始化失败!");
+                        showToast("打开设备失败!");
+                        return;
+                    }
+                    showToast("打开设备成功!");
+                    isOpen = true;
+                    link.setText("断开设备");
+                    if (MyApplication.driver.SetConfig(baudRate, dataBit, stopBit, parity, // 配置串口波特率，函数说明可参照编程手册
+                            flowControl)) {
+                        showToast("串口设置成功!");
+                        radioGroup.clearCheck();
+                    } else {
+                        showToast("串口设置失败!");
+                    }
                 } else {
-                    showToast("串口设置失败!");
-                }
-            } else {
 
-                new MaterialDialog.Builder(getContext())
-                        .icon(getResources().getDrawable(R.drawable.icon))
-                        .title("未授权限")
-                        .content("确认退出吗？")
-                        .positiveText("确定")
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                getActivity().finish();
-                            }
-                        })
-                        .negativeText("返回").show();
+                    new MaterialDialog.Builder(getContext())
+                            .icon(getResources().getDrawable(R.drawable.icon))
+                            .title("未授权限")
+                            .content("确认退出吗？")
+                            .positiveText("确定")
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    getActivity().finish();
+                                }
+                            })
+                            .negativeText("返回").show();
+                }
             }
         } else {
+            temperature.setChecked(false);
+            pressure.setChecked(false);
+            xdt.setChecked(false);
             link.setText("连接设备");
             isOpen = false;
             try {
@@ -187,12 +292,27 @@ public class DataFragment extends BaseFragment {
             return;
         }
         cancel();
+        temperature.setChecked(true);
         showToast("您已选择体温功能");
         temperatureHandler = new Handler() {
             public void handleMessage(Message msg) {
                 String data = (String) msg.obj;
                 String newdata = data.replace("\n", "");
-                temperature_data.setText(newdata);
+                try {
+                    Float temp = Float.valueOf(newdata);
+                    if (temp >= hight_temperature) {
+                        temperature_data.setTextColor(Color.RED);
+                    } else {
+                        if (temp <= low_temperature) {
+                            temperature_data.setTextColor(Color.YELLOW);
+                        } else {
+                            temperature_data.setTextColor(Color.GREEN);
+                        }
+                    }
+                    temperature_data.setText(String.format("%.2f",temp));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         };
         temperatureThread = new Thread() {
@@ -205,7 +325,7 @@ public class DataFragment extends BaseFragment {
                         break;
                     }
                     int length = MyApplication.driver.ReadData(buffer, 4096);
-                    Logger.e(length+"");
+                    Logger.e(length + "");
                     if (length > 0) {
                         String recv = new String(buffer, 0, length);        //以字符串形式输出
                         msg.obj = recv;
@@ -225,24 +345,57 @@ public class DataFragment extends BaseFragment {
             return;
         }
         cancel();
+        pressure.setChecked(true);
         showToast("您已选择血压功能");
         pressureHandler = new Handler() {
             public void handleMessage(Message msg) {
                 String data = (String) msg.obj;
-                String newdata = data.replace("\n", "");
-                switch (i) {
-                    case 0:
-                        hight_pressure_data.setText(newdata);
-                        i++;
-                        break;
-                    case 1:
-                        low_pressure_data.setText(newdata);
-                        i++;
-                        break;
-                    case 2:
-                        average_pressure_data.setText(newdata);
-                        i = 0;
-                        break;
+                String newdata = data.substring(0, 3);
+                try {
+                    Integer temp = Integer.valueOf(newdata);
+                    switch (i) {
+                        case 0:
+                            if (temp >= hight_hpressure) {
+                                hight_pressure_data.setTextColor(Color.RED);
+                            } else {
+                                if (temp <= low_hpressure) {
+                                    hight_pressure_data.setTextColor(Color.YELLOW);
+                                } else {
+                                    hight_pressure_data.setTextColor(Color.GREEN);
+                                }
+                            }
+                            hight_pressure_data.setText(newdata);
+                            i++;
+                            break;
+                        case 1:
+                            if (temp >= hight_lpressure) {
+                                low_pressure_data.setTextColor(Color.RED);
+                            } else {
+                                if (temp <= low_lpressure) {
+                                    low_pressure_data.setTextColor(Color.YELLOW);
+                                } else {
+                                    low_pressure_data.setTextColor(Color.GREEN);
+                                }
+                            }
+                            low_pressure_data.setText(newdata);
+                            i++;
+                            break;
+                        case 2:
+                            if (temp >= hight_heartbeat) {
+                                heartbeat_data.setTextColor(Color.RED);
+                            } else {
+                                if (temp <= low_heartbeat) {
+                                    heartbeat_data.setTextColor(Color.YELLOW);
+                                } else {
+                                    heartbeat_data.setTextColor(Color.GREEN);
+                                }
+                            }
+                            heartbeat_data.setText(newdata);
+                            i = 0;
+                            break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         };
@@ -256,7 +409,7 @@ public class DataFragment extends BaseFragment {
                         break;
                     }
                     int length = MyApplication.driver.ReadData(buffer, 4096);
-                    Logger.e(length+"");
+                    Logger.e(length + "");
                     if (length > 0) {
                         String recv = new String(buffer, 0, length);        //以字符串形式输出
 
@@ -277,6 +430,8 @@ public class DataFragment extends BaseFragment {
             return;
         }
         cancel();
+        timer = new Timer();
+        xdt.setChecked(true);
         isFirst = true;
         showToast("您已选择心电图功能");
         xdtHandler = new Handler() {
@@ -324,23 +479,12 @@ public class DataFragment extends BaseFragment {
             flag = false;
             Thread.sleep(200);
             flag = true;
+            timer.cancel();
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-//        try {
-//            if (isFirst) {
-//                timer.cancel();
-//                showToast("取消timer");
-//                isFirst = true;
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            Logger.e(e, e.getMessage());
-//            showToast(e.getMessage());
-//            return;
-//        }
+
 
     }
 
@@ -461,21 +605,35 @@ public class DataFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (bitmap != null)
-            bitmap.recycle();
-        bitmap = null;
-        c2 = null;
         cancel();
+        timer.cancel();
+//        if (bitmap != null)
+//            bitmap.recycle();
+//        bitmap = null;
+//        c2 = null;
+
         Logger.e("定时器停止");
         try {
-            Thread.sleep(200);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        getNowData();
+        isOpen = false;
         MyApplication.driver.CloseDevice();
         Logger.e("关闭串口");
 //        System.exit(0);
+    }
+
+    private void getNowData() {
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences("data", Context.MODE_PRIVATE).edit();
+        editor.putString("temperature", temperature_data.getText().toString());
+        editor.putString("low_pressure", low_pressure_data.getText().toString());
+        editor.putString("hight_pressure", hight_pressure_data.getText().toString());
+        editor.putString("heartbeat", heartbeat_data.getText().toString());
+        editor.commit();
+        editor.apply();
     }
 
 }

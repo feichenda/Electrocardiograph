@@ -113,7 +113,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/average_pressure_data"
+                    android:id="@+id/heartbeat_data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"

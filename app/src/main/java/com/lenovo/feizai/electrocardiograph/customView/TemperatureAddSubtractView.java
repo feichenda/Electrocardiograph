@@ -110,4 +110,23 @@ public class TemperatureAddSubtractView extends LinearLayout implements View.OnC
     public void setTextColor(ColorStateList colors) {
         data.setTextColor(colors);
     }
+
+    public String getText() {
+        return data.getText().toString();
+    }
+
+    public void setText(String content) {
+        data.setText(content);
+    }
+
+    public Float getValue() {
+        String s = data.getText().toString();
+        try {
+            Float value = Float.valueOf(s);
+            return value;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.00f;
+        }
+    }
 }

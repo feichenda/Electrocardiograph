@@ -126,4 +126,23 @@ public class PressureAddSubtractView extends LinearLayout implements View.OnClic
     public void setTextColor(ColorStateList colors) {
         data.setTextColor(colors);
     }
+
+    public String getText() {
+        return data.getText().toString();
+    }
+
+    public void setText(String content) {
+        data.setText(content);
+    }
+
+    public Integer getValue() {
+        String s = data.getText().toString();
+        try {
+            Integer value = Integer.valueOf(s);
+            return value;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 }
