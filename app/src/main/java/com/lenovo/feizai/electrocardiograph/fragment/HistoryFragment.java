@@ -80,14 +80,14 @@ public class HistoryFragment extends BaseFragment {
             if (temperature_data1 >= hight_temperature) {
                 temperature_data.setTextColor(Color.RED);
             } else if (temperature_data1 <= low_temperature) {
-                temperature_data.setTextColor(Color.YELLOW);
+                temperature_data.setTextColor(Color.rgb(255,218,0));
             } else {
                 temperature_data.setTextColor(Color.GREEN);
             }
             if (hight_pressure_data1 >= hight_hpressure) {
                 hight_pressure_data.setTextColor(Color.RED);
             } else if (hight_pressure_data1 <= low_hpressure) {
-                hight_pressure_data.setTextColor(Color.YELLOW);
+                hight_pressure_data.setTextColor(Color.rgb(255,218,0));
             } else {
                 hight_pressure_data.setTextColor(Color.GREEN);
             }
@@ -95,7 +95,7 @@ public class HistoryFragment extends BaseFragment {
             if (low_pressure_data1 >= hight_lpressure) {
                 low_pressure_data.setTextColor(Color.RED);
             } else if (low_pressure_data1 <= low_lpressure) {
-                low_pressure_data.setTextColor(Color.YELLOW);
+                low_pressure_data.setTextColor(Color.rgb(255,218,0));
             } else {
                 low_pressure_data.setTextColor(Color.GREEN);
             }
@@ -103,7 +103,7 @@ public class HistoryFragment extends BaseFragment {
             if (heartbeat_data1 >= hight_heartbeat) {
                 heartbeat_data.setTextColor(Color.RED);
             } else if (heartbeat_data1 <= low_heartbeat) {
-                heartbeat_data.setTextColor(Color.YELLOW);
+                heartbeat_data.setTextColor(Color.rgb(255,218,0));
             } else {
                 heartbeat_data.setTextColor(Color.GREEN);
             }

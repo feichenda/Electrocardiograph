@@ -148,14 +148,14 @@ public class DataFragment extends BaseFragment {
             if (temperature_data1 >= hight_temperature) {
                 temperature_data.setTextColor(Color.RED);
             } else if (temperature_data1 <= low_temperature) {
-                temperature_data.setTextColor(Color.YELLOW);
+                temperature_data.setTextColor(Color.rgb(255,218,0));
             } else {
                 temperature_data.setTextColor(Color.GREEN);
             }
             if (hight_pressure_data1 >= hight_hpressure) {
                 hight_pressure_data.setTextColor(Color.RED);
             } else if (hight_pressure_data1 <= low_hpressure) {
-                hight_pressure_data.setTextColor(Color.YELLOW);
+                hight_pressure_data.setTextColor(Color.rgb(255,218,0));
             } else {
                 hight_pressure_data.setTextColor(Color.GREEN);
             }
@@ -163,7 +163,7 @@ public class DataFragment extends BaseFragment {
             if (low_pressure_data1 >= hight_lpressure) {
                 low_pressure_data.setTextColor(Color.RED);
             } else if (low_pressure_data1 <= low_lpressure) {
-                low_pressure_data.setTextColor(Color.YELLOW);
+                low_pressure_data.setTextColor(Color.rgb(255,218,0));
             } else {
                 low_pressure_data.setTextColor(Color.GREEN);
             }
@@ -171,7 +171,7 @@ public class DataFragment extends BaseFragment {
             if (heartbeat_data1 >= hight_heartbeat) {
                 heartbeat_data.setTextColor(Color.RED);
             } else if (heartbeat_data1 <= low_heartbeat) {
-                heartbeat_data.setTextColor(Color.YELLOW);
+                heartbeat_data.setTextColor(Color.rgb(255,218,0));
             } else {
                 heartbeat_data.setTextColor(Color.GREEN);
             }
@@ -305,7 +305,7 @@ public class DataFragment extends BaseFragment {
                         temperature_data.setTextColor(Color.RED);
                     } else {
                         if (temp <= low_temperature) {
-                            temperature_data.setTextColor(Color.YELLOW);
+                            temperature_data.setTextColor(Color.rgb(255,218,0));
                         } else {
                             temperature_data.setTextColor(Color.GREEN);
                         }
@@ -360,7 +360,7 @@ public class DataFragment extends BaseFragment {
                                 hight_pressure_data.setTextColor(Color.RED);
                             } else {
                                 if (temp <= low_hpressure) {
-                                    hight_pressure_data.setTextColor(Color.YELLOW);
+                                    hight_pressure_data.setTextColor(Color.rgb(255,218,0));
                                 } else {
                                     hight_pressure_data.setTextColor(Color.GREEN);
                                 }
@@ -373,7 +373,7 @@ public class DataFragment extends BaseFragment {
                                 low_pressure_data.setTextColor(Color.RED);
                             } else {
                                 if (temp <= low_lpressure) {
-                                    low_pressure_data.setTextColor(Color.YELLOW);
+                                    low_pressure_data.setTextColor(Color.rgb(255,218,0));
                                 } else {
                                     low_pressure_data.setTextColor(Color.GREEN);
                                 }
@@ -386,7 +386,7 @@ public class DataFragment extends BaseFragment {
                                 heartbeat_data.setTextColor(Color.RED);
                             } else {
                                 if (temp <= low_heartbeat) {
-                                    heartbeat_data.setTextColor(Color.YELLOW);
+                                    heartbeat_data.setTextColor(Color.rgb(255,218,0));
                                 } else {
                                     heartbeat_data.setTextColor(Color.GREEN);
                                 }
@@ -619,12 +619,12 @@ public class DataFragment extends BaseFragment {
 //        c2 = null;
 
         Logger.e("定时器停止");
-//        try {
-//            Thread.sleep(500);
-//        } catch (InterruptedException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         getNowData();
 
         MyApplication.driver.CloseDevice();
